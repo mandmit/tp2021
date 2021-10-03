@@ -1,0 +1,3 @@
+﻿  Source.cpp
+D:\TechProg2021\Lab2\Var1Stack\Source.cpp(73): warning C4717: operator<<: рекурсия на всех путях выполнения, функция вызовет переполнение стека
+  Var1Stack.vcxproj -> D:\TechProg2021\Lab2\Var1Stack\Debug\Var1Stack.exe
