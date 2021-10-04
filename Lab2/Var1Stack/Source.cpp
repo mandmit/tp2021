@@ -63,19 +63,78 @@ ostream& operator<<(ostream& stream, const Date& date) {
 	return stream;
 }
 
-struct Record {
+class Record {
 public:
-	Record(Date date, string record) {
+	Record(const Date& date,const string& record) {
 		this->date = date;
 		this->record = record;
 	}
+	Date getDate() const {
+		return this->date;
+	}
+	string getRecord() const {
+		return this->record;
+	}
+	void setDate(const Date& date) {
+		this->date = date;
+	}
+	void setRecord(const string& record) {
+		this->record = record;
+	}
+private:
 	Date date;
 	string record;
 };
 
+void CreateNewRecord(stack <Record>& allRecords, vector <Record>& allRecordsToWrite) {
+	bool next = true;
+	string note;
+	int day = 0, month = 0, year = 0;
+	while (next) {
+		cout << "Enter date in format \"day*month*year\"(where \"*\" is any character like \"/ or | or # etc...\"):  " << endl;
+		cin >> day; cin.ignore(1);cin >> month; cin.ignore(1);cin >> year; cin.ignore(1);
+		if (day > 31 || day < 1 || month>12 || month < 1 || year < 0) {
+			next = true;
+			cout << "Please enter correct date!" << endl;
+		}
+		else {
+			next = false;
+		}
+	}
+	Date newDate(day, month, year);
+	cout << "Your date is: " << newDate << endl;
+	cout << "Now enter your record: " << endl;
+	getline(cin, note);
+	Record newRecord(newDate, note);
+	allRecords.push(newRecord);
+	allRecordsToWrite.push_back(newRecord);
+}
+
 ostream& operator<<(ostream& stream, const Record& record) {
-	stream << record.date << "\t" << record.record;
+	stream << record.getDate() << "\t" << record.getRecord();
 	return stream;
+}
+
+bool operator<(const Record& lr, const Record& rr) {
+	return (lr.getDate() < rr.getDate());
+}
+
+void ShowTopRecord(stack <Record> allRecords) {
+	if (!allRecords.empty()) {
+		cout << allRecords.top() << endl;
+	}
+	else {
+		cout << "No records on this moment" << endl;
+	}
+}
+void PrintAllRecords(const vector <Record>& allRecords) {
+	for (auto el : allRecords) {
+		cout << el << endl;
+	}
+}
+void DeleteTopRecord(stack <Record>& allRecords, vector <Record>& allRecordsToWrite) {
+	allRecords.pop();
+	allRecordsToWrite.pop_back();
 }
 
 void ReadDataOrCreate(stack <Record>& st, vector <Record>& v) {
@@ -88,18 +147,20 @@ void ReadDataOrCreate(stack <Record>& st, vector <Record>& v) {
 	}
 	else {
 		cout << "File is open to reading!" << endl;
-		while (!input.eof()) {
-			getline(input, day, '\\');
-			getline(input, month, '\\');
-			getline(input, year, '\t');
-			dayInt = stoi(day);
-			monthInt = stoi(month);
-			yearInt = stoi(year);
-			Date newDate(dayInt, monthInt, yearInt);
-			getline(input, record);
-			Record newRecord(newDate, record);
-			st.push(newRecord);
-			v.push_back(newRecord);
+		if (isalnum(input.peek())) {
+			while (!input.eof()) {
+				getline(input, day, '\\');
+				getline(input, month, '\\');
+				getline(input, year, '\t');
+				dayInt = stoi(day);
+				monthInt = stoi(month);
+				yearInt = stoi(year);
+				Date newDate(dayInt, monthInt, yearInt);
+				getline(input, record);
+				Record newRecord(newDate, record);
+				st.push(newRecord);
+				v.push_back(newRecord);
+			}
 		}
 	}
 	input.close();
@@ -133,47 +194,20 @@ int main() {
 		cout << "\"Exit\" is command - \"--q\"" << endl;
 		cin >> command;
 		if (command == "--c") {
-			bool next = true;
-			string note;
-			int day = 0, month = 0, year = 0;
-			while (next) {
-				cout << "Enter date in format \"day*month*year\"(where \"*\" is any character like \"/ or | or # etc...\"):  " << endl;
-				cin >> day; cin.ignore(1);cin >> month; cin.ignore(1);cin >> year; cin.ignore(1);
-				if (day > 31 || day < 1 || month>12 || month < 1 || year < 0) {
-					next = true;
-					cout << "Please enter correct date!" << endl;
-				}
-				else {
-					next = false;
-				}
-			}
-			Date newDate(day,month,year);
-			cout << "Your date is: " << newDate << endl;
-			cout << "Now enter your record: " << endl;
-			getline(cin, note);
-			Record newRecord(newDate, note);
-			allRecords.push(newRecord);
-			allRecordsToWrite.push_back(newRecord);
+			CreateNewRecord(allRecords, allRecordsToWrite);
 		}
 		else if (command == "--d") {
-			allRecords.pop();
-			allRecordsToWrite.pop_back();
+			DeleteTopRecord(allRecords, allRecordsToWrite);
 		}
 		else if (command == "--s") {
-			if (!allRecords.empty()) {
-				cout << allRecords.top() << endl;
-			}
-			else {
-				cout << "No records on this moment" << endl;
-			}
+			ShowTopRecord(allRecords);
 		}
 		else if (command == "--p") {
-			for (auto el : allRecordsToWrite) {
-				cout << el << endl;
-			}
+			PrintAllRecords(allRecordsToWrite);
 		}
 		else if (command == "--q") {
 			exit = true;
+			sort(begin(allRecordsToWrite), end(allRecordsToWrite));
 			RewriteDataInTheFile(allRecordsToWrite);
 			cout << "Your records has been rewrited!" << endl;
 		}
