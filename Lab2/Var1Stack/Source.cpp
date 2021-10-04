@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <fstream>
+#include <vector>
 
 using namespace std;
 
@@ -77,28 +78,50 @@ ostream& operator<<(ostream& stream, const Record& record) {
 	return stream;
 }
 
-void ReadDataOrCreate(stack <Record>& st) {
+void ReadDataOrCreate(stack <Record>& st, vector <Record>& v) {
 	ifstream input("data.txt");
 	string day, month, year, record;
+	int dayInt = 0, monthInt = 0, yearInt = 0;
 	if (!input.is_open()) {
 		ofstream("data.txt");
 		cout << "File created" << endl;
 	}
-	cout << "File is open to reading!" << endl;
-	while (input) {
-		getline(input, day, '\\');
-		getline(input, month, '\\');
-		getline(input, year, '\t');
-		Date newDate(stoi(day), stoi(month), stoi(year));
-		getline(input, record);
-		Record newRecord(newDate, record);
-		st.push(newRecord);
+	else {
+		cout << "File is open to reading!" << endl;
+		while (!input.eof()) {
+			getline(input, day, '\\');
+			getline(input, month, '\\');
+			getline(input, year, '\t');
+			dayInt = stoi(day);
+			monthInt = stoi(month);
+			yearInt = stoi(year);
+			Date newDate(dayInt, monthInt, yearInt);
+			getline(input, record);
+			Record newRecord(newDate, record);
+			st.push(newRecord);
+			v.push_back(newRecord);
+		}
 	}
+	input.close();
+}
+
+void RewriteDataInTheFile(const vector <Record>& v) {
+	ofstream output("data.txt");
+	for (int i = 0; i < v.size(); i++) {
+		if (i == v.size() - 1) {
+			output << v[i];
+		}
+		else {
+			output << v[i] << endl;
+		}
+	}
+	output.close();
 }
 
 int main() {
 	stack <Record> allRecords;
-	ReadDataOrCreate(allRecords);
+	vector <Record> allRecordsToWrite;
+	ReadDataOrCreate(allRecords, allRecordsToWrite);
 	bool exit = false;
 	while (!exit) {
 		string command;
@@ -106,6 +129,7 @@ int main() {
 		cout << "\"Create new record\" is command - \"--c\"" << endl;
 		cout << "\"Delete last record\" is command - \"--d\"" << endl;
 		cout << "\"Show head record\" is command - \"--s\"" << endl;
+		cout << "\"Show all records\" is command - \"--p\"" << endl;
 		cout << "\"Exit\" is command - \"--q\"" << endl;
 		cin >> command;
 		if (command == "--c") {
@@ -129,20 +153,29 @@ int main() {
 			getline(cin, note);
 			Record newRecord(newDate, note);
 			allRecords.push(newRecord);
+			allRecordsToWrite.push_back(newRecord);
 		}
 		else if (command == "--d") {
 			allRecords.pop();
+			allRecordsToWrite.pop_back();
 		}
 		else if (command == "--s") {
 			if (!allRecords.empty()) {
 				cout << allRecords.top() << endl;
 			}
 			else {
-				cout << "No records" << endl;
+				cout << "No records on this moment" << endl;
+			}
+		}
+		else if (command == "--p") {
+			for (auto el : allRecordsToWrite) {
+				cout << el << endl;
 			}
 		}
 		else if (command == "--q") {
 			exit = true;
+			RewriteDataInTheFile(allRecordsToWrite);
+			cout << "Your records has been rewrited!" << endl;
 		}
 		else {
 			cout << "You entered the wrong command, please try again." << endl;

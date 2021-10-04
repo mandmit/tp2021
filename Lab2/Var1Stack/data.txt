@@ -1,0 +1,7 @@
+02\05\0201	Some Record
+03\01\200002	You what is time now?
+12\12\2002	Today i want to go to the library
+01\01\1111	Dvided
+01\01\1111	New record
+12\12\0013	Recording new line
+13\08\2002	Birthday of Dima Manilo
