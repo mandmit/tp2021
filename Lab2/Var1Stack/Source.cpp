@@ -1,6 +1,9 @@
 #include <iostream>
 #include <string>
 #include <stack>
+#include <iomanip>
+#include <algorithm>
+#include <fstream>
 
 using namespace std;
 
@@ -53,7 +56,9 @@ bool operator==(const Date& ld, const Date& rd) {
 }
 
 ostream& operator<<(ostream& stream, const Date& date) {
-	stream << date.getDay() << "\\" << date.getMonth() << "\\" << date.getYear();
+	stream << setw(2) << setfill('0') << date.getDay() << "\\";
+	stream << setw(2) << setfill('0') << date.getMonth() << "\\";
+	stream << setw(4) << setfill('0') << date.getYear();
 	return stream;
 }
 
@@ -68,12 +73,32 @@ public:
 };
 
 ostream& operator<<(ostream& stream, const Record& record) {
-	stream << record.date << "\t" << record;
+	stream << record.date << "\t" << record.record;
 	return stream;
+}
+
+void ReadDataOrCreate(stack <Record>& st) {
+	ifstream input("data.txt");
+	string day, month, year, record;
+	if (!input.is_open()) {
+		ofstream("data.txt");
+		cout << "File created" << endl;
+	}
+	cout << "File is open to reading!" << endl;
+	while (input) {
+		getline(input, day, '\\');
+		getline(input, month, '\\');
+		getline(input, year, '\t');
+		Date newDate(stoi(day), stoi(month), stoi(year));
+		getline(input, record);
+		Record newRecord(newDate, record);
+		st.push(newRecord);
+	}
 }
 
 int main() {
 	stack <Record> allRecords;
+	ReadDataOrCreate(allRecords);
 	bool exit = false;
 	while (!exit) {
 		string command;
@@ -84,10 +109,20 @@ int main() {
 		cout << "\"Exit\" is command - \"--q\"" << endl;
 		cin >> command;
 		if (command == "--c") {
-			int day = 0, month = 0, year = 0;
+			bool next = true;
 			string note;
-			cout << "Enter date in format \"day*month*year\"(where \"*\" is any character like \"/ or | or # etc...\"):  " << endl;
-			cin >> day; cin.ignore(1);cin >> month; cin.ignore(1);cin >> year; cin.ignore(1);
+			int day = 0, month = 0, year = 0;
+			while (next) {
+				cout << "Enter date in format \"day*month*year\"(where \"*\" is any character like \"/ or | or # etc...\"):  " << endl;
+				cin >> day; cin.ignore(1);cin >> month; cin.ignore(1);cin >> year; cin.ignore(1);
+				if (day > 31 || day < 1 || month>12 || month < 1 || year < 0) {
+					next = true;
+					cout << "Please enter correct date!" << endl;
+				}
+				else {
+					next = false;
+				}
+			}
 			Date newDate(day,month,year);
 			cout << "Your date is: " << newDate << endl;
 			cout << "Now enter your record: " << endl;
@@ -98,7 +133,7 @@ int main() {
 		else if (command == "--d") {
 			allRecords.pop();
 		}
-		else if (command == "--s") {//Troubles with this. Fix in first priority
+		else if (command == "--s") {
 			if (!allRecords.empty()) {
 				cout << allRecords.top() << endl;
 			}
