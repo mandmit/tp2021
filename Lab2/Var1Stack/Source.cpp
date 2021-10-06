@@ -1,10 +1,10 @@
 #include <iostream>
 #include <string>
-#include <stack>
 #include <iomanip>
 #include <algorithm>
 #include <fstream>
 #include <vector>
+#include </TechProg2021/Lab2/Var1Stack/MyStack.h>
 
 using namespace std;
 
@@ -65,6 +65,9 @@ ostream& operator<<(ostream& stream, const Date& date) {
 
 class Record {
 public:
+	Record() {
+		Record(Date(1,1,1),"Null");
+	}
 	Record(const Date& date,const string& record) {
 		this->date = date;
 		this->record = record;
@@ -86,7 +89,7 @@ private:
 	string record;
 };
 
-void CreateNewRecord(stack <Record>& allRecords, vector <Record>& allRecordsToWrite) {
+void CreateNewRecord(MyStack <Record>& allRecords, vector <Record>& allRecordsToWrite) {
 	bool next = true;
 	string note;
 	int day = 0, month = 0, year = 0;
@@ -119,25 +122,35 @@ bool operator<(const Record& lr, const Record& rr) {
 	return (lr.getDate() < rr.getDate());
 }
 
-void ShowTopRecord(stack <Record> allRecords) {
-	if (!allRecords.empty()) {
-		cout << allRecords.top() << endl;
+void ShowTopRecord(MyStack <Record> allRecords) {
+	if (!allRecords.isEmpty()) {
+		cout << allRecords.head() << endl;
 	}
 	else {
 		cout << "No records on this moment" << endl;
 	}
 }
 void PrintAllRecords(const vector <Record>& allRecords) {
-	for (auto el : allRecords) {
-		cout << el << endl;
+	if (allRecords.size() != 0) {
+		for (auto &el : allRecords) {
+			cout << el << endl;
+		}
+	}
+	else {
+		cout << "Nothing to print" << endl;
 	}
 }
-void DeleteTopRecord(stack <Record>& allRecords, vector <Record>& allRecordsToWrite) {
-	allRecords.pop();
-	allRecordsToWrite.pop_back();
+void DeleteTopRecord(MyStack <Record>& allRecords, vector <Record>& allRecordsToWrite) {
+	if (allRecords.getSize() != 0) {
+		cout << "Sucsesfully deleted element: [" << allRecords.pop() << "]" << endl;
+		allRecordsToWrite.pop_back();
+	}
+	else {
+		cout << "Nothing to delete from stack" << endl;
+	}
 }
 
-void ReadDataOrCreate(stack <Record>& st, vector <Record>& v) {
+void ReadDataOrCreate(MyStack <Record>& st, vector <Record>& v) {
 	ifstream input("data.txt");
 	string day, month, year, record;
 	int dayInt = 0, monthInt = 0, yearInt = 0;
@@ -180,7 +193,7 @@ void RewriteDataInTheFile(const vector <Record>& v) {
 }
 
 int main() {
-	stack <Record> allRecords;
+	MyStack <Record> allRecords;
 	vector <Record> allRecordsToWrite;
 	ReadDataOrCreate(allRecords, allRecordsToWrite);
 	bool exit = false;

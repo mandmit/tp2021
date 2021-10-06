@@ -1,4 +1,0 @@
-01\02\0003	Some text
-03\02\0005	Again new record
-03\04\0005	New record for test
-04\10\2021	I`m goed to the home
