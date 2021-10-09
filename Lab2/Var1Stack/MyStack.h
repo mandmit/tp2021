@@ -30,10 +30,16 @@ public:
 		}
 	}
 	T pop() {
+		if (this->isEmpty()) {
+			throw exception("Stack does`nt have elements to delete!");
+		}
 		this->size--;
 		return this->pointer[this->size];
 	}
 	T head() {
+		if (this->isEmpty()) {
+			throw exception("Stack does`nt have elements to show head element!");
+		}
 		return this->pointer[this->size - 1];
 	}
 	MyStack(const MyStack& copy) {

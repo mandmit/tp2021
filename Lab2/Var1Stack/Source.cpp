@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <fstream>
 #include <vector>
-#include </TechProg2021/Lab2/Var1Stack/MyStack.h>
+#include "/TechProg2021/Lab2/Var1Stack/MyStack.h"
 
 using namespace std;
 
@@ -123,30 +123,23 @@ bool operator<(const Record& lr, const Record& rr) {
 }
 
 void ShowTopRecord(MyStack <Record> allRecords) {
-	if (!allRecords.isEmpty()) {
+	try{
 		cout << allRecords.head() << endl;
 	}
-	else {
-		cout << "No records on this moment" << endl;
+	catch(const exception& ex) {
+		cout << ex.what() << endl;
 	}
 }
-void PrintAllRecords(const vector <Record>& allRecords) {
-	if (allRecords.size() != 0) {
-		for (auto &el : allRecords) {
-			cout << el << endl;
-		}
-	}
-	else {
-		cout << "Nothing to print" << endl;
-	}
+void PrintAllRecords(MyStack <Record> allRecords) {
+	allRecords.Print();
 }
 void DeleteTopRecord(MyStack <Record>& allRecords, vector <Record>& allRecordsToWrite) {
-	if (allRecords.getSize() != 0) {
+	try {
 		cout << "Sucsesfully deleted element: [" << allRecords.pop() << "]" << endl;
 		allRecordsToWrite.pop_back();
 	}
-	else {
-		cout << "Nothing to delete from stack" << endl;
+	catch (const exception& ex) {
+		cout << ex.what() << endl;
 	}
 }
 
@@ -216,7 +209,7 @@ int main() {
 			ShowTopRecord(allRecords);
 		}
 		else if (command == "--p") {
-			PrintAllRecords(allRecordsToWrite);
+			PrintAllRecords(allRecords);
 		}
 		else if (command == "--q") {
 			exit = true;

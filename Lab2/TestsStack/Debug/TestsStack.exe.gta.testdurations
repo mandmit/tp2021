@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GtaTestDurations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Executable>D:\TechProg2021\Lab2\TestsStack\Debug\TestsStack.exe</Executable>
+  <TestDurations>
+    <TestDuration Test="FirstTest.InitDefaultConstructorStack" Duration="1" />
+    <TestDuration Test="SecondTest.PushStack" Duration="1" />
+    <TestDuration Test="ThirdTest.PopStack" Duration="1" />
+    <TestDuration Test="FourthTest.HeadStack" Duration="1" />
+    <TestDuration Test="FifthTest.ConstructorOfCopy" Duration="1" />
+    <TestDuration Test="SixthTest.EmptyStack" Duration="1" />
+    <TestDuration Test="SeventhTest.PushThenPopThenEmptyStack" Duration="1" />
+    <TestDuration Test="EighthTest.ThrowStackPop" Duration="1" />
+    <TestDuration Test="NinthTest.ThrowStackHead" Duration="1" />
+    <TestDuration Test="TenthTest.NoThrowStackPop" Duration="1" />
+  </TestDurations>
+</GtaTestDurations>

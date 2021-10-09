@@ -1,0 +1,4 @@
+D:\TechProg2021\Lab2\TestsStack\Debug\TestsStack.vcxproj.CopyComplete
+D:\TechProg2021\Lab2\TestsStack\Debug\TestsStack.exe
+D:\TechProg2021\Lab2\TestsStack\Debug\gtest.pdb
+D:\TechProg2021\Lab2\TestsStack\Debug\gtest_main.pdb
