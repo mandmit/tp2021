@@ -11,6 +11,7 @@ public:
 		this->pointer = nullptr;
 		this->size = 0;
 	}
+
 	void push(T data) {
 		T* tmpPointer;
 		try{
@@ -29,6 +30,7 @@ public:
 			cout << e.what() << endl;
 		}
 	}
+
 	T pop() {
 		if (this->isEmpty()) {
 			throw exception("Stack does`nt have elements to delete!");
@@ -36,12 +38,14 @@ public:
 		this->size--;
 		return this->pointer[this->size];
 	}
+
 	T head() {
 		if (this->isEmpty()) {
 			throw exception("Stack does`nt have elements to show head element!");
 		}
 		return this->pointer[this->size - 1];
 	}
+
 	MyStack(const MyStack& copy) {
 		try {
 			this->pointer = new T[copy.size];
@@ -54,6 +58,7 @@ public:
 			cout << e.what() << endl;
 		}
 	}
+
 	MyStack operator=(const MyStack& copy) {
 		if (this->size > 0) {
 			this->size = 0;
@@ -71,12 +76,15 @@ public:
 		}
 		return *this;
 	}
+
 	int getSize() {
 		return this->size;
 	}
+
 	bool isEmpty() {
 		return (this->size == 0);
 	}
+
 	void Print() {
 		T* tmpPointer;
 		tmpPointer = this->pointer;
@@ -93,11 +101,13 @@ public:
 			}
 		}
 	}
+
 	~MyStack() {
 		if (this->size > 0) {
 			delete[] this->pointer;
 		}
 	}
+
 private:
 	T* pointer;
 	int size;
