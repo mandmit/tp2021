@@ -21,7 +21,7 @@ pipeline {
 						}
 					}
 				steps{
-					sh 'g++ -o main main.cpp'
+					sh "cmake ../ && cmake --build ."
 				}
 				post{
 					success{
