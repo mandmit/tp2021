@@ -1,4 +1,3 @@
-
 FROM gcc:latest as build
 
 ADD . /src
