@@ -21,7 +21,7 @@ pipeline {
 						}
 					}
 				steps{
-					sh "mkdir build && cd build"
+					sh "cd build"
    					sh "cmake -G main"
 				}
 				post{
