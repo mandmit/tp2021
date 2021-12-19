@@ -21,9 +21,8 @@ pipeline {
 						}
 					}
 				steps{
-					sh "mkdir buildT && cd buildT"
-   					sh "cmake -G Ninja <workspace-root>/source"
-   					sh "DESTDIR=<workspace-root>/artifacts ninja all install"
+					sh "mkdir build && cd build"
+   					sh "cmake -G main"
 				}
 				post{
 					success{
